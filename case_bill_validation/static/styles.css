@@ -1,0 +1,588 @@
+/* ============================================================================
+ * 病案结算清单核验系统 · 浏览器面板样式
+ * 设计基调：企业中后台控制台观感（中性灰 + 状态色 + 等宽数字）
+ * 设计令牌：CSS 变量统一管理，禁止散落硬编码色值
+ * ============================================================================
+ */
+
+:root {
+  /* 状态色（字段级 7 态） */
+  --status-pending: #94a3b8;
+  --status-extracting: #3b82f6;
+  --status-rule_checked: #eab308;
+  --status-semantic_checked: #f97316;
+  --status-confirmed: #10b981;
+  --status-rejected: #ef4444;
+  --status-flagged: #a855f7;
+
+  /* 中性灰阶 */
+  --c-bg: #f8fafc;
+  --c-bg-elevated: #ffffff;
+  --c-border: #e2e8f0;
+  --c-border-strong: #cbd5e1;
+  --c-text: #0f172a;
+  --c-text-muted: #64748b;
+  --c-text-subtle: #94a3b8;
+
+  /* 品牌色 */
+  --c-primary: #2563eb;
+  --c-primary-hover: #1d4ed8;
+  --c-success: #10b981;
+  --c-danger: #ef4444;
+
+  /* 间距（8px 栅格） */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* 圆角与阴影 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-elevated: 0 10px 30px rgba(15, 23, 42, 0.08), 0 4px 6px rgba(15, 23, 42, 0.05);
+
+  /* 字体（系统中文栈） */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Consolas, monospace;
+
+  /* 层级 */
+  --z-sticky: 10;
+  --z-modal: 100;
+}
+
+/* ---------- 重置 ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 600; }
+
+/* ---------- 顶部 ---------- */
+
+.app-header {
+  background: var(--c-bg-elevated);
+  border-bottom: 1px solid var(--c-border);
+  padding: var(--space-4) var(--space-6);
+}
+
+.app-header__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.app-title {
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+
+.app-subtitle {
+  margin: 0;
+  color: var(--c-text-muted);
+  font-size: 13px;
+}
+
+/* ---------- 上传区 ---------- */
+
+.upload-section {
+  padding: var(--space-4) var(--space-6);
+}
+
+.upload-form {
+  background: var(--c-bg-elevated);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.upload-form__label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+.upload-form__row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.upload-form__hint {
+  margin: var(--space-3) 0 0 0;
+  color: var(--c-text-muted);
+  font-size: 13px;
+}
+
+/* ---------- 流水线进度 ---------- */
+
+.progress-section {
+  padding: 0 var(--space-6) var(--space-4);
+}
+
+.progress-section__inner {
+  background: var(--c-bg-elevated);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.progress-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: 13px;
+}
+
+.progress-label { color: var(--c-text-muted); }
+.progress-step { color: var(--c-primary); font-weight: 500; }
+.case-id-display {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  color: var(--c-text-subtle);
+}
+
+.progress-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.progress-step-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  color: var(--c-text-muted);
+  border: 1px solid var(--c-border);
+  font-size: 13px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.progress-step-item .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-text-subtle);
+}
+
+.progress-step-item.is-active {
+  background: #eff6ff;
+  color: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+.progress-step-item.is-active .dot { background: var(--c-primary); }
+
+.progress-step-item.is-done {
+  background: #ecfdf5;
+  color: var(--c-success);
+  border-color: var(--c-success);
+}
+
+.progress-step-item.is-done .dot { background: var(--c-success); }
+
+/* ---------- 主网格 ---------- */
+
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) minmax(360px, 1fr);
+  gap: var(--space-4);
+  padding: 0 var(--space-6) var(--space-4);
+}
+
+@media (max-width: 1024px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: var(--c-bg-elevated);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  max-height: calc(100vh - 360px);
+  overflow: hidden;
+}
+
+.panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--c-border);
+  background: #fafbfc;
+}
+
+.panel__title { font-size: 15px; }
+.panel__meta { color: var(--c-text-subtle); font-size: 12px; }
+
+.panel__toolbar {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.filter-input {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  width: 220px;
+  background: var(--c-bg-elevated);
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.status-counts {
+  display: flex;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--c-text-muted);
+}
+
+.status-counts .badge {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+}
+
+.panel__body {
+  flex: 1;
+  overflow: auto;
+}
+
+/* ---------- 字段表 ---------- */
+
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.field-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f8fafc;
+  color: var(--c-text-muted);
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--c-border);
+  font-weight: 500;
+  font-size: 12px;
+  z-index: var(--z-sticky);
+}
+
+.field-table tbody td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: top;
+}
+
+.field-table tbody tr {
+  transition: background 0.15s;
+}
+
+.field-table tbody tr:hover {
+  background: #f1f5f9;
+}
+
+.field-table tbody tr.is-selected {
+  background: #eff6ff;
+}
+
+.field-table .empty-row td {
+  text-align: center;
+  color: var(--c-text-subtle);
+  padding: var(--space-6);
+}
+
+.field-table .filtered-out { display: none; }
+
+.field-name {
+  font-weight: 500;
+  color: var(--c-text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.field-value {
+  color: var(--c-text);
+  word-break: break-all;
+  max-width: 280px;
+}
+
+.field-confidence {
+  font-variant-numeric: tabular-nums;
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+}
+
+.field-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* ---------- 状态徽章 ---------- */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  background: var(--status-pending);
+  white-space: nowrap;
+}
+
+.status-badge.is-clickable,
+.status-badge.clickable { cursor: pointer; }
+
+.status-badge.clickable:hover {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 1px;
+}
+
+.status-badge.is-clickable:hover {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 1px;
+}
+
+.status-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.status-badge[data-status="pending"] { background: var(--status-pending); }
+.status-badge[data-status="extracting"] { background: var(--status-extracting); }
+.status-badge[data-status="rule_checked"] { background: var(--status-rule_checked); color: #422006; }
+.status-badge[data-status="semantic_checked"] { background: var(--status-semantic_checked); }
+.status-badge[data-status="confirmed"] { background: var(--status-confirmed); }
+.status-badge[data-status="rejected"] { background: var(--status-rejected); }
+.status-badge[data-status="flagged"] { background: var(--status-flagged); }
+
+/* ---------- 按钮 ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.05s;
+  font-family: inherit;
+}
+
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn--primary { background: var(--c-primary); color: white; }
+.btn--primary:hover:not(:disabled) { background: var(--c-primary-hover); }
+
+.btn--success { background: var(--c-success); color: white; }
+.btn--success:hover:not(:disabled) { filter: brightness(1.05); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--c-text-muted);
+  border-color: var(--c-border-strong);
+}
+.btn--ghost:hover:not(:disabled) {
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--c-danger);
+  border-color: var(--c-danger);
+}
+.btn--danger:hover:not(:disabled) {
+  background: var(--c-danger);
+  color: white;
+}
+
+/* ---------- 原文区 ---------- */
+
+.source-text {
+  margin: 0;
+  padding: var(--space-4);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--c-text);
+  background: var(--c-bg-elevated);
+}
+
+mark.field-highlight {
+  background: #fef08a;
+  border: 1px solid #facc15;
+  border-radius: 3px;
+  padding: 0 2px;
+  cursor: help;
+  transition: background 0.2s, opacity 0.5s;
+}
+
+mark.field-highlight.fading {
+  opacity: 0.35;
+  background: #fef9c3;
+}
+
+/* ---------- 导出区 ---------- */
+
+.export-section {
+  padding: 0 var(--space-6) var(--space-5);
+}
+
+.export-section__inner {
+  background: var(--c-bg-elevated);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.export-section__status {
+  margin: 0;
+  color: var(--c-text-muted);
+  font-size: 13px;
+  flex: 1;
+}
+
+/* ---------- 底部 ---------- */
+
+.app-footer {
+  padding: var(--space-4) var(--space-6);
+  text-align: center;
+  color: var(--c-text-subtle);
+  font-size: 12px;
+  border-top: 1px solid var(--c-border);
+  background: var(--c-bg-elevated);
+}
+
+/* ---------- 错误提示 ---------- */
+
+.is-error {
+  color: var(--c-danger);
+  border-color: var(--c-danger);
+}
+
+.toast {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--c-text);
+  color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
+  z-index: var(--z-modal);
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.is-success { background: var(--c-success); }
+.toast.is-danger { background: var(--c-danger); }
+
+/* ============================================================================
+ * SSE 重连提示横幅（Task 27）
+ * ============================================================================
+ * 区别于 .toast：toast 短提示 2.4s 自动消失；reconnecting-banner 持续显示
+ * 直到 EventSource.onopen 触发才摘掉。圆角 + 阴影层级比 toast 低，避免遮
+ * 挡主操作区。
+ */
+
+.reconnecting-banner {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  pointer-events: none;
+}
+
+.reconnecting-banner.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.reconnecting-banner__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  animation: reconnecting-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes reconnecting-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}

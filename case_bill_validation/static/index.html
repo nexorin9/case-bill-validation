@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>病案结算清单核验系统</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <h1 class="app-title">病案结算清单核验系统</h1>
+      <p class="app-subtitle">上传出院小结或病案首页，链式流水线自动给出 193 项字段级合规标记</p>
+    </div>
+  </header>
+
+  <section class="upload-section" aria-label="上传出院小结">
+    <form id="upload-form" class="upload-form">
+      <label class="upload-form__label" for="file-input">选择出院小结（PDF / Word / 纯文本）：</label>
+      <div class="upload-form__row">
+        <input id="file-input" type="file" name="file"
+               accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+               required />
+        <button id="upload-submit" type="submit" class="btn btn--primary">上传并启动流水线</button>
+      </div>
+      <p id="upload-hint" class="upload-form__hint" role="status" aria-live="polite">就绪：选择一份出院小结文件上传。</p>
+    </form>
+  </section>
+
+  <section id="pipeline-progress" class="progress-section" hidden aria-label="流水线进度">
+    <div class="progress-section__inner">
+      <div class="progress-meta">
+        <span class="progress-label">流水线进度</span>
+        <span id="progress-step" class="progress-step">等待上传</span>
+        <span id="case-id-display" class="case-id-display"></span>
+      </div>
+      <ol class="progress-steps" id="progress-steps">
+        <li data-step="segmenter" class="progress-step-item"><span class="dot"></span>段落切分</li>
+        <li data-step="extractor" class="progress-step-item"><span class="dot"></span>字段抽取</li>
+        <li data-step="cross_validator" class="progress-step-item"><span class="dot"></span>跨字段校验</li>
+        <li data-step="rule_checker" class="progress-step-item"><span class="dot"></span>规则审查</li>
+        <li data-step="semantic_checker" class="progress-step-item"><span class="dot"></span>语义核</li>
+      </ol>
+    </div>
+  </section>
+
+  <main class="main-grid" id="main-grid" hidden>
+    <section class="panel panel--fields" aria-label="字段表">
+      <header class="panel__header">
+        <h2 class="panel__title">字段表</h2>
+        <div class="panel__toolbar">
+          <input id="filter-input" type="search" placeholder="按字段名或值过滤…" class="filter-input" />
+          <div class="status-counts" id="status-counts" aria-label="状态计数"></div>
+        </div>
+      </header>
+      <div class="panel__body">
+        <table class="field-table" id="field-table">
+          <thead>
+            <tr>
+              <th scope="col">字段</th>
+              <th scope="col">抽取值</th>
+              <th scope="col">状态</th>
+              <th scope="col">置信度</th>
+              <th scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody id="field-table-body">
+            <tr class="empty-row">
+              <td colspan="5">尚无字段，等待流水线抽取完成…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel panel--source" aria-label="原文高亮">
+      <header class="panel__header">
+        <h2 class="panel__title">原文高亮区</h2>
+        <span id="source-meta" class="panel__meta">—</span>
+      </header>
+      <div class="panel__body">
+        <pre id="source-text" class="source-text" aria-live="polite">原文会在上传完成后加载。</pre>
+      </div>
+    </section>
+  </main>
+
+  <section class="export-section" id="export-section" hidden aria-label="导出">
+    <div class="export-section__inner">
+      <button id="export-btn" class="btn btn--success" type="button">导出结算清单 Excel</button>
+      <p id="export-status" class="export-section__status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <footer class="app-footer">
+    <small>病案结算清单核验系统 · v0.1.0 · 仅作辅助核验，最终提交前请结算员复核</small>
+  </footer>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
